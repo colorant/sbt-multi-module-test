@@ -29,8 +29,9 @@ object testBuild extends Build {
   lazy val root = Project("root", file("."), settings = rootSettings) aggregate(allProjects: _*)
   lazy val core = Project("core", file("core"), settings = coreSettings)
   lazy val foo = Project("foo", file("foo"), settings = fooSettings) dependsOn (core)
+  lazy val bar = Project("bar", file("bar"), settings = barSettings) dependsOn (core)
 
-  lazy val allProjects = Seq[ProjectReference](core, foo)
+  lazy val allProjects = Seq[ProjectReference](core, foo, bar)
 
   def sharedSettings = Defaults.defaultSettings ++ Seq(
     organization       := "org.raymond.test",
@@ -55,12 +56,31 @@ object testBuild extends Build {
     name := "test-core"
   )
 
+  def commonSettings = sharedSettings ++ Seq(
+    name := "test-common"
+  )
+
   def rootSettings = sharedSettings ++ Seq(
     publish := {}
   )
 
   def fooSettings = sharedSettings ++ Seq(
-    name :="test-foo"
-  )
+    name :="test-foo",
+    unmanagedSourceDirectories in Compile <++= baseDirectory { base =>
+      Seq(
+            base / "../common/src/main/scala"
+         )
+    }
+  ) ++ assemblySettings
+
+  def barSettings = sharedSettings ++ Seq(
+    name :="test-bar",
+    unmanagedSourceDirectories in Compile <++= baseDirectory { base =>
+      Seq(
+            base / "../common/src/main/scala"
+         )
+    }
+  ) ++ assemblySettings
+
 
 }

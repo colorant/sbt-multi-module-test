@@ -1,10 +1,10 @@
-package org.raymond.test.foo
+package org.raymond.test.bar
 
 import org.raymond.test.core.Core
 import org.raymond.test.common.Common
 
-class Foo {
-  val name = "foo"
+class Bar {
+  val name = "bar"
   def sayName = {
     val c = new Core
     c.sayName
@@ -17,9 +17,9 @@ class Foo {
   }
 }
 
-object Foo {
+object Bar {
   def main(argStrings: Array[String]) {
-    val f = new Foo
+    val f = new Bar
     f.sayName
     f.callCommon
   }
